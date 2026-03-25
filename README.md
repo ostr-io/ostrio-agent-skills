@@ -1,2 +1,2 @@
 # ostrio-agent-skills
-Agent skills for ostrio services, compatible with Cursor, Claude, and Codex
+Agent skills for ostr.io services, compatible with Cursor, Claude, and Codex
