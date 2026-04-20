@@ -10,9 +10,9 @@ reads the Agent Skills `SKILL.md` format.
 
 ## Skills
 
-| Skill | Description | Install & docs |
-| --- | --- | --- |
-| [`ostrio-prerendering`](skills/ostrio-prerendering/) | Integrate, operate, debug, purge, and maintain ostr.io pre-rendering (HTML CDN + crawler / social-preview / AI-agent pre-rendering) on Next.js, Node, Meteor, Nginx, Apache, Caddy, Cloudflare Workers, Netlify, Vercel, Supabase Edge, Shopify, WordPress, and any SPA/PWA/SSR/static site. | [README](skills/ostrio-prerendering/README.md) · [SKILL.md](skills/ostrio-prerendering/SKILL.md) |
+| Skill | Description | Install one-liner | Docs |
+| --- | --- | --- | --- |
+| [`ostrio-prerendering`](skills/ostrio-prerendering/) | Integrate, operate, debug, purge, and maintain ostr.io pre-rendering (HTML CDN + crawler / social-preview / AI-agent pre-rendering) on Next.js, Node, Meteor, Nginx, Apache, Caddy, Cloudflare Workers, Netlify, Vercel, Supabase Edge, Shopify, WordPress, and any SPA/PWA/SSR/static site. | `npx skills add ostr-io/ostrio-agent-skills -s ostrio-prerendering` | [README](skills/ostrio-prerendering/README.md) · [SKILL.md](skills/ostrio-prerendering/SKILL.md) |
 
 > More `ostr.io` skills will be added here over time.
 
@@ -41,9 +41,32 @@ body the agent reads).
 
 ## Install
 
-See the per-skill README for agent-specific install paths. Quick reference:
+Recommended: use the open [`skills`](https://www.npmjs.com/package/skills)
+CLI — it supports Cursor, Claude Code, Codex, Antigravity, OpenCode, GitHub
+Copilot, Gemini CLI, Warp, Windsurf, Goose, Cline, and 35+ more agents.
 
-- `ostrio-prerendering` → [install instructions](skills/ostrio-prerendering/README.md#install)
+```shell
+# Install a specific skill into the detected agent
+npx skills add ostr-io/ostrio-agent-skills --skill ostrio-prerendering
+
+# List every skill in this repo
+npx skills add ostr-io/ostrio-agent-skills --list
+
+# Install globally (available across projects)
+npx skills add ostr-io/ostrio-agent-skills --skill ostrio-prerendering -g
+
+# Target specific agents
+npx skills add ostr-io/ostrio-agent-skills -s ostrio-prerendering \
+  -a cursor -a claude-code -a codex -y
+
+# Install all skills from this repo
+npx skills add ostr-io/ostrio-agent-skills --all
+```
+
+Manual install (tarball / git sparse-checkout) and full per-agent install
+path tables:
+
+- `ostrio-prerendering` → [full install instructions](skills/ostrio-prerendering/README.md#install)
 
 ## Contributing
 

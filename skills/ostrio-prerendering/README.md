@@ -62,91 +62,137 @@ ostrio-prerendering/
 
 ## Install
 
-Each agent reads skills from its own directory. Copy this skill there, or
-symlink it.
+Recommended install path uses the open [`skills`](https://www.npmjs.com/package/skills)
+CLI (by [vercel-labs/skills](https://github.com/vercel-labs/skills)) — it
+auto-detects installed agents, copies or symlinks the skill to the right
+directory, and supports 45+ agents including **Cursor**, **Claude Code**,
+**Codex**, **Antigravity**, **OpenCode**, **GitHub Copilot**, **Gemini CLI**,
+**Warp**, **Windsurf**, **Goose**, **Cline**, and more.
 
-Public clone URL (use in any agent that understands "install from GitHub"):
-
-```
-https://github.com/ostr-io/ostrio-agent-skills
-```
-
-### Cursor
-
-Cursor reads skills from two locations:
-
-- **Project-level** (shared with anyone using the repo): `.cursor/skills/<name>/SKILL.md`
-- **Personal / global** (your user): `~/.cursor/skills/<name>/SKILL.md`
-
-Install `ostrio-prerendering` personally:
+### Install via `npx skills` (recommended)
 
 ```shell
-git clone https://github.com/ostr-io/ostrio-agent-skills /tmp/ostrio-agent-skills
-mkdir -p ~/.cursor/skills
-cp -r /tmp/ostrio-agent-skills/skills/ostrio-prerendering ~/.cursor/skills/
+# Project-scoped (default) — installs into the detected agent's project skills dir
+npx skills add ostr-io/ostrio-agent-skills --skill ostrio-prerendering
+
+# Global — available across all projects
+npx skills add ostr-io/ostrio-agent-skills --skill ostrio-prerendering -g
+
+# List available skills first, don't install
+npx skills add ostr-io/ostrio-agent-skills --list
 ```
 
-Or install into a specific project:
+Target specific agents with `-a` (repeat for multiple):
 
 ```shell
-git clone https://github.com/ostr-io/ostrio-agent-skills /tmp/ostrio-agent-skills
-mkdir -p .cursor/skills
-cp -r /tmp/ostrio-agent-skills/skills/ostrio-prerendering .cursor/skills/
+# Cursor
+npx skills add ostr-io/ostrio-agent-skills -s ostrio-prerendering -a cursor
+
+# Claude Code
+npx skills add ostr-io/ostrio-agent-skills -s ostrio-prerendering -a claude-code
+
+# Codex
+npx skills add ostr-io/ostrio-agent-skills -s ostrio-prerendering -a codex
+
+# Antigravity
+npx skills add ostr-io/ostrio-agent-skills -s ostrio-prerendering -a antigravity
+
+# Multiple agents at once
+npx skills add ostr-io/ostrio-agent-skills -s ostrio-prerendering \
+  -a cursor -a claude-code -a codex -a opencode
+
+# Install to all detected agents
+npx skills add ostr-io/ostrio-agent-skills -s ostrio-prerendering --agent '*'
 ```
 
-The skill ships with `disable-model-invocation: true` so it behaves like an
-explicit slash-skill — invoke from chat with `@ostrio-prerendering` or by
-selecting it from the skills menu.
-
-### Claude Code / claude.ai
-
-Claude reads skills from `~/.claude/skills/<name>/SKILL.md` (personal) or
-`.claude/skills/<name>/SKILL.md` (project).
+Non-interactive (CI/CD):
 
 ```shell
-git clone https://github.com/ostr-io/ostrio-agent-skills /tmp/ostrio-agent-skills
-mkdir -p ~/.claude/skills
-cp -r /tmp/ostrio-agent-skills/skills/ostrio-prerendering ~/.claude/skills/
+# Install globally into Claude Code + Cursor + Codex without prompts
+npx skills add ostr-io/ostrio-agent-skills \
+  -s ostrio-prerendering -a claude-code -a cursor -a codex -g -y
+
+# Copy files instead of symlinking (use when symlinks aren't supported)
+npx skills add ostr-io/ostrio-agent-skills -s ostrio-prerendering --copy -y
 ```
 
-Invoke:
-
-- In Claude Code: mention the skill by name, or reference the file directly.
-- On claude.ai: upload the skill's directory as a Project / Capability per Anthropic's current Skill publishing flow.
-
-### Codex CLI
-
-Codex reads skills from `$CODEX_HOME/skills/` (default `~/.codex/skills/`).
+Verify install:
 
 ```shell
-git clone https://github.com/ostr-io/ostrio-agent-skills /tmp/ostrio-agent-skills
-mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills"
-cp -r /tmp/ostrio-agent-skills/skills/ostrio-prerendering "${CODEX_HOME:-$HOME/.codex}/skills/"
+npx skills list                      # lists all installed skills
+npx skills ls -a cursor              # filter by agent
 ```
 
-### Google Antigravity
+### Default install paths per agent
 
-Antigravity reads the `SKILL.md` format. Install location depends on the
-current Antigravity release — check its documentation. The skill directory is
-portable; copying `ostrio-prerendering/` into Antigravity's skills location
-works without modification.
+The `skills` CLI writes to these locations (authoritative list: [vercel-labs/skills](https://github.com/vercel-labs/skills#available-agents)):
 
-### Any other agent
+| Agent | `--agent` | Project path | Global path (`-g`) |
+| --- | --- | --- | --- |
+| Cursor | `cursor` | `.agents/skills/` | `~/.cursor/skills/` |
+| Claude Code | `claude-code` | `.claude/skills/` | `~/.claude/skills/` |
+| Codex | `codex` | `.agents/skills/` | `~/.codex/skills/` |
+| Antigravity | `antigravity` | `.agents/skills/` | `~/.gemini/antigravity/skills/` |
+| OpenCode | `opencode` | `.agents/skills/` | `~/.config/opencode/skills/` |
+| Gemini CLI | `gemini-cli` | `.agents/skills/` | `~/.gemini/skills/` |
+| GitHub Copilot | `github-copilot` | `.agents/skills/` | `~/.copilot/skills/` |
+| Warp | `warp` | `.agents/skills/` | `~/.agents/skills/` |
+| Windsurf | `windsurf` | `.windsurf/skills/` | `~/.codeium/windsurf/skills/` |
+| Goose | `goose` | `.goose/skills/` | `~/.config/goose/skills/` |
 
-If your agent reads YAML-frontmatter `SKILL.md` files, drop this directory
-into its recognized skills location. The frontmatter (`name`, `description`,
-`disable-model-invocation`) is standard.
+### Manual install (fallback — no Node.js required)
 
-### One-line install directly from an agent
+Use when `npx` is unavailable (air-gapped envs, restricted CI, no Node runtime).
 
-When a user asks their agent to install this skill, the agent can run:
+#### Tarball — no `git` required
 
 ```shell
-git clone https://github.com/ostr-io/ostrio-agent-skills "${TMPDIR:-/tmp}/ostrio-agent-skills" \
-  && cp -r "${TMPDIR:-/tmp}/ostrio-agent-skills/skills/ostrio-prerendering" "$DEST_SKILLS_DIR/"
+DEST=~/.cursor/skills   # change per target agent's skills directory
+mkdir -p "$DEST"
+curl -fsSL https://github.com/ostr-io/ostrio-agent-skills/archive/refs/heads/main.tar.gz \
+  | tar -xz -C "$DEST" --strip-components=2 \
+    ostrio-agent-skills-main/skills/ostrio-prerendering
 ```
 
-— where `$DEST_SKILLS_DIR` is one of the paths above.
+Result: `"$DEST"/ostrio-prerendering/SKILL.md` and all its `templates/` /
+`examples/` — nothing else from the repo.
+
+#### Git sparse-checkout — if you want `git pull` updates
+
+```shell
+DEST=~/.cursor/skills
+mkdir -p "$DEST"
+git clone --depth 1 --filter=blob:none --sparse \
+  https://github.com/ostr-io/ostrio-agent-skills \
+  "$DEST/.ostrio-agent-skills"
+git -C "$DEST/.ostrio-agent-skills" sparse-checkout set skills/ostrio-prerendering
+ln -sfn "$DEST/.ostrio-agent-skills/skills/ostrio-prerendering" \
+        "$DEST/ostrio-prerendering"
+```
+
+Update later with `git -C "$DEST/.ostrio-agent-skills" pull`.
+
+### Agent-specific notes
+
+- **Cursor.** Skill ships with `disable-model-invocation: true` in its
+  frontmatter — invoke explicitly with `@ostrio-prerendering` or via the
+  skills menu instead of relying on automatic model invocation.
+- **Claude Code / claude.ai.** Reference the skill by name in chat. On
+  claude.ai, upload the `ostrio-prerendering/` directory as a Project /
+  Capability per Anthropic's current Skill publishing flow.
+- **Codex CLI.** Invoke: `ostrio-prerendering setup on my Nginx server`.
+- **Google Antigravity.** `skills` CLI handles the install path for you.
+  Manual install location depends on the current Antigravity release — check
+  its docs. The `ostrio-prerendering/` directory is portable as-is.
+- **Kiro CLI.** After install, add the skill to your custom agent's `resources` in `.kiro/agents/<agent>.json`:
+
+  ```json
+  { "resources": ["skill://.kiro/skills/**/SKILL.md"] }
+  ```
+- **Any other agent** that reads YAML-frontmatter `SKILL.md`. Frontmatter
+  keys (`name`, `description`, optional `disable-model-invocation`) follow
+  the shared [Agent Skills specification](https://agentskills.io). Unknown
+  keys are ignored by non-Claude/non-Cursor agents.
 
 ---
 
@@ -170,14 +216,48 @@ Example prompts:
 
 ## Update
 
+**`skills` CLI installs** (recommended):
+
 ```shell
-cd /tmp/ostrio-agent-skills && git pull
-# Re-copy the updated skill directory into your agent's skills location.
+# Update all installed skills
+npx skills update
+
+# Update just this skill
+npx skills update ostrio-prerendering
+
+# Update only global or only project-scoped copies
+npx skills update ostrio-prerendering -g
+npx skills update ostrio-prerendering -p
+
+# Non-interactive (auto-detects scope)
+npx skills update ostrio-prerendering -y
+```
+
+**Tarball install** — re-run the same `curl | tar` one-liner; it overwrites
+the existing `ostrio-prerendering/` in place.
+
+**Sparse-checkout install:**
+
+```shell
+git -C "$DEST/.ostrio-agent-skills" pull
 ```
 
 The skill mirrors canonical ostr.io regexes byte-for-byte — when ostr.io
 upstream updates its bot / static-extension lists, this repository tracks
 those updates.
+
+## Remove
+
+```shell
+# Remove from all agents
+npx skills remove ostrio-prerendering
+
+# Remove from specific agents only
+npx skills remove ostrio-prerendering -a cursor
+
+# Remove from global scope
+npx skills remove ostrio-prerendering -g
+```
 
 ---
 
@@ -226,18 +306,23 @@ Codex CLI supports skills in `$CODEX_HOME/skills/`. OpenAI is building out
 first-party distribution — monitor <https://github.com/openai/codex> for a
 skills marketplace or curated list, and submit this skill there.
 
-### 5. NPM / package registries
+### 5. `skills` CLI ecosystem (primary distribution path)
 
-This skill is documentation-centric, not code-packaged. If demand appears for
-a one-line install:
+The open [`skills`](https://www.npmjs.com/package/skills) CLI pulls skills
+directly from this repo via GitHub shorthand — no npm publish required. End
+users install with:
 
+```shell
+npx skills add ostr-io/ostrio-agent-skills --skill ostrio-prerendering
 ```
-npx @ostrio/ostrio-agent-skills install ostrio-prerendering
-```
 
-…publish a small helper CLI under `@ostrio/ostrio-agent-skills` on NPM
-that detects the agent and copies the skill to the right path. Keep the skill
-source canonical in this repo; the CLI is a thin installer.
+Keep this repository public, preserve the `skills/<name>/SKILL.md` layout,
+and ensure frontmatter stays spec-compliant (`name` + `description` required)
+so the CLI keeps resolving the skill.
+
+Optional registry submission: the [skills.sh](https://skills.sh) directory
+indexes skills so they appear in `npx skills find <keyword>` search. Submit
+once stable — the repo URL alone is sufficient.
 
 ### 6. Keep the skill in sync with upstream
 

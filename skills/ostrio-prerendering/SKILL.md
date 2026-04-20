@@ -8,7 +8,9 @@ disable-model-invocation: true
 
 Operational skill for integrating and maintaining [ostr.io pre-rendering](https://ostr.io/info/prerendering) — a technology-agnostic **HTML CDN + SEO middleware** that detects crawler / social-preview / AI-agent `User-Agent`s, forwards those requests to an ostr.io rendering endpoint, and returns fully-rendered HTML. Humans still receive the original SPA/SSR response.
 
-This skill is agent-agnostic (Cursor, Codex, Claude, Antigravity, and others). Read top-to-bottom on first invocation; after that, jump directly to the relevant section.
+This skill is agent-agnostic (Cursor, Codex, Claude, Antigravity, OpenCode, GitHub Copilot, Gemini CLI, Warp, Windsurf, Goose, Cline, and 35+ more). Read top-to-bottom on first invocation; after that, jump directly to the relevant section.
+
+> **Install / update this skill** via the open [`skills`](https://www.npmjs.com/package/skills) CLI: `npx skills add ostr-io/ostrio-agent-skills --skill ostrio-prerendering` (add `-g` for global, `-a cursor -a claude-code` etc. to target specific agents). Alternative install methods: see [`README.md`](README.md#install).
 
 ## Contents
 
@@ -617,11 +619,14 @@ When the user asks to **purge / redeploy**:
 
 ## 13. Supporting files
 
+- [`README.md`](README.md) — install (`npx skills add …`), update, remove, invoke, and publishing instructions.
 - [`checklists.md`](checklists.md) — pre-integration, go-live, validation, and maintenance checklists.
 - [`troubleshooting.md`](troubleshooting.md) — 25+ symptom → cause → verify → fix rows.
 - [`validation.md`](validation.md) — full 14-scenario validation matrix with commands and expected output.
 - [`templates/`](templates/) — copy-paste-ready middleware and config for every integration tier.
 - [`examples/`](examples/) — ad-hoc `curl` cookbook, route-exclusion examples, `IS_PRERENDERING` runtime patterns.
+
+This skill conforms to the shared [Agent Skills specification](https://agentskills.io) (required frontmatter: `name`, `description`). It is distributable via the open [`skills`](https://www.npmjs.com/package/skills) CLI from any public Git source.
 
 ---
 
