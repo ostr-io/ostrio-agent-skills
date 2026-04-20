@@ -26,7 +26,7 @@ agent-specific `skills/` location below, or symlink it.
 Public clone URL (use in any agent that understands "install from GitHub"):
 
 ```
-https://github.com/veliovgroup/ostrio-agent-skills
+https://github.com/ostr-io/ostrio-agent-skills
 ```
 
 ### Cursor
@@ -39,7 +39,7 @@ Cursor reads skills from two locations:
 Install `ostrio-prerendering` personally:
 
 ```shell
-git clone https://github.com/veliovgroup/ostrio-agent-skills /tmp/ostrio-agent-skills
+git clone https://github.com/ostr-io/ostrio-agent-skills /tmp/ostrio-agent-skills
 mkdir -p ~/.cursor/skills
 cp -r /tmp/ostrio-agent-skills/skills/ostrio-prerendering ~/.cursor/skills/
 ```
@@ -47,7 +47,7 @@ cp -r /tmp/ostrio-agent-skills/skills/ostrio-prerendering ~/.cursor/skills/
 Or install into a specific project:
 
 ```shell
-git clone https://github.com/veliovgroup/ostrio-agent-skills /tmp/ostrio-agent-skills
+git clone https://github.com/ostr-io/ostrio-agent-skills /tmp/ostrio-agent-skills
 mkdir -p .cursor/skills
 cp -r /tmp/ostrio-agent-skills/skills/ostrio-prerendering .cursor/skills/
 ```
@@ -62,7 +62,7 @@ Claude reads skills from `~/.claude/skills/<name>/SKILL.md` (personal) or
 `.claude/skills/<name>/SKILL.md` (project).
 
 ```shell
-git clone https://github.com/veliovgroup/ostrio-agent-skills /tmp/ostrio-agent-skills
+git clone https://github.com/ostr-io/ostrio-agent-skills /tmp/ostrio-agent-skills
 mkdir -p ~/.claude/skills
 cp -r /tmp/ostrio-agent-skills/skills/ostrio-prerendering ~/.claude/skills/
 ```
@@ -77,7 +77,7 @@ Invoke:
 Codex reads skills from `$CODEX_HOME/skills/` (default `~/.codex/skills/`).
 
 ```shell
-git clone https://github.com/veliovgroup/ostrio-agent-skills /tmp/ostrio-agent-skills
+git clone https://github.com/ostr-io/ostrio-agent-skills /tmp/ostrio-agent-skills
 mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills"
 cp -r /tmp/ostrio-agent-skills/skills/ostrio-prerendering "${CODEX_HOME:-$HOME/.codex}/skills/"
 ```
@@ -100,7 +100,7 @@ optional `disable-model-invocation`) is standard.
 When a user asks their agent to install this skill, the agent can run:
 
 ```shell
-git clone https://github.com/veliovgroup/ostrio-agent-skills "${TMPDIR:-/tmp}/ostrio-agent-skills" \
+git clone https://github.com/ostr-io/ostrio-agent-skills "${TMPDIR:-/tmp}/ostrio-agent-skills" \
   && cp -r "${TMPDIR:-/tmp}/ostrio-agent-skills/skills/ostrio-prerendering" "$DEST_SKILLS_DIR/"
 ```
 
@@ -180,8 +180,7 @@ those updates.
 
 ### 1. GitHub (primary distribution — immediate)
 
-The repository itself is the primary distribution channel. Any agent can
-`git clone` it.
+The repository itself is the primary distribution channel. Any agent can `git clone` it.
 
 - Push the repo under `veliovgroup/ostrio-agent-skills` (or the target org).
 - Tag each skill release: `git tag ostrio-prerendering-v1.0.0 && git push --tags`.
@@ -209,15 +208,12 @@ Until an official directory is open, promote via:
 Cursor maintains a curated set of built-in skills at
 `~/.cursor/skills-cursor/` and publishes examples in its docs. To get listed:
 
-- Open a feature request / skill submission at <https://github.com/cursor-ai/cursor>
-  referencing this repository.
+- Open a feature request / skill submission at <https://github.com/cursor-ai/cursor> referencing this repository.
 - Community can also share via <https://docs.cursor.com> "Skills" page submissions when available.
 
 ### 4. Codex skills (OpenAI)
 
-Codex CLI supports skills in `$CODEX_HOME/skills/`. OpenAI is building out
-first-party distribution — monitor <https://github.com/openai/codex> for a
-skills marketplace or curated list, and submit this skill there.
+Codex CLI supports skills in `$CODEX_HOME/skills/`. OpenAI is building out first-party distribution — monitor <https://github.com/openai/codex> for a skills marketplace or curated list, and submit this skill there.
 
 ### 5. NPM / package registries
 
@@ -232,31 +228,17 @@ npx @veliovgroup/ostrio-agent-skills install ostrio-prerendering
 that detects the agent and copies the skill to the right path. Keep the skill
 source canonical in this repo; the CLI is a thin installer.
 
-### 6. Social / content promotion
+### 8. Keep skills in sync with upstream
 
-- Add a section to <https://ostr.io/info/prerendering> and the ostr.io panel
-  ("Integration Guide") linking directly to
-  `https://github.com/veliovgroup/ostrio-agent-skills/tree/master/skills/ostrio-prerendering`.
-- Share on X/Twitter, LinkedIn, Hacker News, DEV.to.
-- Cross-post install instructions in `veliovgroup/spiderable-middleware`,
-  `veliovgroup/seo-middleware-nextjs`, and `veliovgroup/ostrio` READMEs.
-
-### 7. Keep skills in sync with upstream
-
-- Re-copy the canonical bot UA regex whenever new AI agents emerge
-  (<https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/shared/crawler-ua-regex.md>).
-- Re-copy the canonical static-extensions regex when ostr.io updates it
-  (<https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/shared/static-extensions-regex.md>).
-- Bump `seo-middleware-nextjs` / `spiderable-middleware` version notes in
-  `SKILL.md` and templates if relevant APIs change.
+- Re-copy the canonical bot UA regex whenever new AI agents emerge (<https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/shared/crawler-ua-regex.md>).
+- Re-copy the canonical static-extensions regex when ostr.io updates it (<https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/shared/static-extensions-regex.md>).
+- Bump `seo-middleware-nextjs` / `spiderable-middleware` version notes in `SKILL.md` and templates if relevant APIs change.
 
 ---
 
 ## Contributing
 
-Contributions welcome. See [`AGENTS.md`](AGENTS.md) for repository-level rules
-(how to keep canonical regexes in sync, how to structure new skills, secret
-hygiene).
+Contributions welcome. See [`AGENTS.md`](AGENTS.md) for repository-level rules (how to keep canonical regexes in sync, how to structure new skills, secret hygiene).
 
 New skills should follow the same layout as `ostrio-prerendering/`:
 
@@ -277,4 +259,4 @@ BSD-3-Clause — see [`LICENSE`](LICENSE).
 ## Support
 
 - ostr.io: <https://ostr.io/support>
-- Issue tracker: <https://github.com/veliovgroup/ostrio-agent-skills/issues>
+- Issue tracker: <https://github.com/ostr-io/ostrio-agent-skills/issues>
