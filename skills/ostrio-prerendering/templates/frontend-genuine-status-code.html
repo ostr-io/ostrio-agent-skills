@@ -1,0 +1,26 @@
+<!--
+  Genuine status codes from an SPA.
+
+  Front-end frameworks default to HTTP 200 for every route, including 404s.
+  That destroys indexing. ostr.io reads one of the two signals below and
+  forwards the real status code to the crawler.
+
+  Docs:
+    https://github.com/ostr-io/ostrio-docs/blob/master/docs/prerendering/genuine-status-code.md
+
+  Use ONE of the two patterns. Place in <head> or <body>. Rendered only when
+  the app determines the real status (404, 410, 403, 500, 503, etc.).
+-->
+
+<!-- Pattern A: meta tag (recommended) -->
+<meta name="response:status-code" content="404">
+
+<!-- Pattern B: HTML comment (also works; useful when meta tags are locked down) -->
+<!-- response:status-code=404 -->
+
+<!--
+  Pug/Jade:
+    //- response:status-code=404
+
+  Any standard or custom code works: 201, 400, 401, 403, 404, 410, 422, 500, 503, 514, etc.
+-->
